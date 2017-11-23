@@ -1,0 +1,188 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    @RenderSection("jquery_gritter_css", false)
+ 
+    <!--[if IE 7]>
+          <link rel="stylesheet" href="~/assets/css/font-awesome-ie7.min.css" />
+        <![endif]-->
+    <!--[if lte IE 8]>
+          <link rel="stylesheet" href="~/assets/css/ace-ie.min.css" />
+        <![endif]-->
+    <link href="~/asserts/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="~/asserts/css/font-awesome.min.css" rel="stylesheet" />
+        <link href="~/asserts/css/ace.min.css" rel="stylesheet" />
+        <link href="~/asserts/css/ace-rtl.min.css" rel="stylesheet" />
+        <link href="~/asserts/css/ace-skins.min.css" rel="stylesheet" />
+    <script src="http://apps.bdimg.com/libs/jquery/1.8.2/jquery.min.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="~/assets/js/html5shiv.js"></script>
+    <script src="~/assets/js/respond.min.js"></script>
+    <![endif]-->
+    <script src="~/asserts/js/ace-extra.min.js"></script>
+        <script src="~/asserts/js/bootstrap.min.js"></script>
+        <script src="~/asserts/js/typeahead-bs2.min.js"></script>
+        <script src="~/asserts/js/ace-elements.min.js"></script>
+        <script src="~/asserts/js/ace.min.js"></script>
+    <script src="~/Scripts/knockout-2.2.0.debug.js" type="text/javascript"></script>
+    @RenderSection("customizeheader", false)
+
+</head>
+
+<body>
+    <div class="navbar navbar-default" id="navbar">
+        <script type="text/javascript">
+            try { ace.settings.check('navbar', 'fixed') } catch (e) { }
+        </script>
+
+        <div class="navbar-container" id="navbar-container">
+            <div class="navbar-header pull-left">
+                <a href="#" class="navbar-brand">
+                    <small>
+                        <i class="icon-leaf"></i>
+                        H1024
+                    </small>
+                </a><!-- /.brand -->
+            </div><!-- /.navbar-header -->
+
+            <div class="navbar-header pull-right" role="navigation">
+            
+            </div><!-- /.navbar-header -->
+        </div><!-- /.container -->
+    </div>
+
+    <div class="main-container" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.check('main-container', 'fixed') } catch (e) { }
+        </script>
+
+        <div class="main-container-inner">
+            <a class="menu-toggler" id="menu-toggler" href="#">
+                <span class="menu-text"></span>
+            </a>
+
+            <div class="sidebar" id="sidebar">
+                <script type="text/javascript">
+                    try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
+                </script>
+
+                <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+                    <div class="sidebar-shortcuts-large" id="sidebar-shortcuts-large">
+                        <button class="btn btn-success">
+                            <i class="icon-signal"></i>
+                        </button>
+
+                        <button class="btn btn-info">
+                            <i class="icon-pencil"></i>
+                        </button>
+
+                        <button class="btn btn-warning">
+                            <i class="icon-group"></i>
+                        </button>
+
+                        <button class="btn btn-danger">
+                            <i class="icon-cogs"></i>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-shortcuts-mini" id="sidebar-shortcuts-mini">
+                        <span class="btn btn-success"></span>
+
+                        <span class="btn btn-info"></span>
+
+                        <span class="btn btn-warning"></span>
+
+                        <span class="btn btn-danger"></span>
+                    </div>
+                </div><!-- #sidebar-shortcuts -->
+
+                <ul class="nav nav-list">
+                    <li class="@(ViewBag.Controller=="Home"?"active":"")">
+                        <a href="/Home">
+                            <i class="icon-dashboard"></i>
+                            <span class="menu-text"> 管理中心 </span>
+                        </a>
+                    </li>
+                    <li class="@(ViewBag.Controller == "Home" ? "active" : "")">
+                
+
+                        <ul class="submenu">
+                            <li class="@(ViewBag.Controller=="Home"&&(ViewBag.Action=="Index"||ViewBag.Action=="")?"active":"")">
+                                <a href="/Home/Index">
+                                    <i class="icon-double-angle-right"></i>
+                                    有声书列表
+                                </a>
+                            </li>
+
+                          
+                        </ul>
+                    </li>
+
+                </ul><!-- /.nav-list -->
+
+                <div class="sidebar-collapse" id="sidebar-collapse">
+                    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+                </div>
+
+                <script type="text/javascript">
+                    try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
+                </script>
+            </div>
+
+            <div class="main-content">
+                <div class="breadcrumbs" id="breadcrumbs">
+                    <script type="text/javascript">
+                        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+                    </script>
+
+                    @RenderSection("breadcrumb", true)<!-- .breadcrumb -->
+
+                </div>
+
+                <div class="page-content" id="page-content">
+                    @RenderSection("pageheader", true)
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <!-- PAGE CONTENT BEGINS -->
+                            @RenderBody()
+                            <!-- PAGE CONTENT ENDS -->
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.page-content -->
+            </div><!-- /.main-content -->
+
+            <div class="ace-settings-container" id="ace-settings-container">
+         
+            </div><!-- /#ace-settings-container -->
+        </div><!-- /.main-container-inner -->
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="icon-double-angle-up icon-only bigger-110"></i>
+        </a>
+    </div><!-- /.main-container -->
+    <!-- basic scripts -->
+    <script type="text/javascript">
+        function LayoutViewModel() {
+            self = this;
+            self.Data = ko.observableArray([]);
+            self.BadgeNum = ko.observable(0);
+            self.NodeName = ko.observable("");
+        }
+        var layoutViewModel = new LayoutViewModel();
+        $(function () {
+            ko.applyBindings(layoutViewModel, document.getElementById("navbar"));
+
+            layoutViewModel.Data([
+                { TaskName: 'Software Update', Percentage: '65%' },
+                { TaskName: 'Withdrawal Money', Percentage: '100%' }
+            ])
+            layoutViewModel.BadgeNum(layoutViewModel.Data().length);
+         
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+
+create table tb_book (
+    [bid]            integer PRIMARY KEY autoincrement,                -- 设置主键
+    [status]          int default 0,
+    [bookname]         varchar (50),
+    [imgurl]         varchar (150),
+    [createdate]      datetime default (datetime('now', 'localtime'))    -- 时间
+);
+
+
+create table tb_book_list (
+    [lid]            integer PRIMARY KEY autoincrement,                -- 设置主键
+    [bid]            integer REFERENCES tb_book (bid), ,              
+    [status]          int default 0,
+    [listname]         varchar (50),
+    [fileurl]         varchar (150),
+    [createdate]      datetime default (datetime('now', 'localtime'))    -- 时间
+);

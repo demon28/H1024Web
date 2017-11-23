@@ -1,0 +1,147 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title></title>
+    
+    <script src="js/mui.min.js"></script>
+        <script type="text/javascript" src="js/jquery-3.2.1.min.js" ></script>
+
+    <link href="css/mui.min.css" rel="stylesheet"/>
+ 
+
+    <script type="text/javascript" charset="utf-8">
+      	mui.init();
+    </script>
+</head>
+<body>
+	
+	
+		<div class="mui-content" >
+		 <div style="margin-top: 10px;"></div>
+		 
+		<div  style="text-align: center;">
+			<img id="img_main" style="width: 200px; height: 200px; margin: 0;" src="" />
+			<br />
+			<span id="span_bookname"> </span>
+		</div>
+		
+		<div style="margin-top: 20px;" >
+		<ul class="mui-table-view">
+		
+		    </ul>
+		</div>
+	 
+		</div>
+
+
+
+
+    <script type="text/javascript">
+
+        var obj;
+
+        var par = window.location.href.split('?')[1];
+        var bid = par.split('&')[0].split('=')[1];
+        var bookname = par.split('&')[1].split('=')[1];;
+        var url = par.split('&')[2].split('=')[1];;
+
+        $(document).ready(function () {
+
+ 
+
+            $("#span_bookname").html(decodeURI(bookname));
+            $("#img_main").attr("src", decodeURI(url));
+
+
+        $.ajax({
+            url: "/API/ListSelect?bid=" + bid,
+            type: "POST",
+          
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                obj = result;
+
+                var table = document.body.querySelector('.mui-table-view');
+                var cells = document.body.querySelectorAll('.mui-table-view-cell');
+             
+
+                for (var i = 0; i < result.Content.length; i++) {
+                    var li = document.createElement('li');
+                    li.className = 'mui-table-view-cell';
+                    li.innerHTML = ' <a class="mui-navigate-right" id="a_' + result.Content[i].lid + '" src="' + result.Content[i].fileurl + '" bookname="' + result.Content[i].listname + '" onclick="playAudioList(this.id)">' + result.Content[i].listname + '</a> ';
+                 
+
+                    table.appendChild(li);
+                }
+
+            }
+        });
+
+
+    });
+
+        function cutString(str, len) {
+            if (str.length * 2 <= len) {
+                return str;
+            }
+            var strlen = 0;
+            var s = "";
+            for (var i = 0; i < str.length; i++) {
+                s = s + str.charAt(i);
+                if (str.charCodeAt(i) > 128) {
+                    strlen = strlen + 2;
+                    if (strlen >= len) {
+                        return s.substring(0, s.length - 1) + "...";
+                    }
+                } else {
+                    strlen = strlen + 1;
+                    if (strlen >= len) {
+                        return s.substring(0, s.length - 2) + "...";
+                    }
+                }
+            }
+            return s;
+        }
+
+        function playAudioList(data) {
+
+
+
+            var src=$("#"+data).attr("src");
+            var bookname = $("#" + data).attr("bookname");
+
+            var audio = window.parent.frames["footframe"].document.getElementById("audio");
+            var footbookname = window.parent.frames["footframe"].document.getElementById("footbookname");
+            var btn = window.parent.frames["footframe"].document.getElementById("play-pause-btn");
+            var playPause = window.parent.frames["footframe"].document.getElementById('playPause');
+            var span_audioindex = window.parent.frames["footframe"].document.getElementById('span_audioindex');
+            
+            span_audioindex.innerHTML = data.split('_')[1];
+
+            footbookname.innerHTML =cutString(bookname,16);
+
+            audio.innerHTML="";
+          
+            for (var i = 0; i < obj.Content.length; i++) {
+
+                var source = " <source   id=\"source" + obj.Content[i].lid + "\" src=\"" + obj.Content[i].fileurl + "\" type=\"audio/mpeg\">";
+                audio.innerHTML+=source;
+            }
+
+            audio.src = src;
+
+            
+            audio.load();
+        
+            btn.click();
+        }
+
+
+
+     </script>
+</body>
+</html>

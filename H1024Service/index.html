@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    
+    <title></title>
+
+    <link href="css/mui.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+    <meta http-equiv="expires" content="Wed, 26 Feb 1997 08:21:57 GMT">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+   
+    <script src="js/jquery-3.2.1.min.js"></script>
+
+</head>
+<body>
+
+
+    <div class="mui-content" id="are1" style="background-color:white">
+
+
+
+        <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+
+            <div class="mui-indexed-list-search mui-input-row mui-search">
+                <input type="search" class="mui-input-clear mui-indexed-list-search-input" id="txt_value" placeholder="搜索" />
+            </div>
+
+            <div class="mui-scroll" style="margin-top:10px">
+              
+                <ul class="mui-table-view mui-grid-view"></ul>
+            </div>
+        </div>
+    </div>
+    <span id="span_pageindex" style="display:none">1</span>
+    <span id="span_pagecount" style="display:none">1</span>
+    <span id="span_isenter" style="display:none">0</span>
+
+
+</body>
+<script src="/js/mui.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+    mui.init(
+        //{
+        //pullRefresh: {
+        //    container: '#pullrefresh',
+
+        //    up: {
+        //        contentrefresh: '正在加载...',
+        //        callback: pullupRefresh
+        //    }
+        //}
+        //}
+
+    );
+    var count = 0;
+
+    function pullupRefresh() {
+
+        setTimeout(function () {
+
+            loaddata();
+
+        }, 1500);
+
+    }
+
+
+    $(document).ready(function () {
+
+        $(".mui-pull-top-pocket,.mui-pull-bottom-pocket").css("height", "0px");
+
+        loaddata();
+
+    });
+
+    function loaddata() {
+
+        var data = {
+            model: {
+                Str: $("#txt_value").val(),
+                PageIndex: $("#span_pageindex").html(),
+                PageSize: 10
+            }
+        };
+
+        $.ajax({
+            url: "/API/Select",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+
+               
+
+                var pageindex = parseInt(result.PageIndex) + 1;
+                $("#span_pageindex").html(pageindex);
+                $("#span_pagecount").html(result.PageCount);
+
+
+                var table = document.body.querySelector('.mui-table-view');
+                var cells = document.body.querySelectorAll('.mui-table-view-cell');
+
+                
+                
+
+                if ( $("#span_isenter").html()=="1") {
+
+                    for (var i = 0; i < result.Content.length; i++) {
+                        var li = document.createElement('li');
+                        li.className = 'mui-table-view-cell mui-media mui-col-xs-6';
+                        li.innerHTML = ' <a  href="content.html?bid=' + result.Content[i].bid + '&bookname=' + encodeURIComponent(result.Content[i].bookname) + '&imgurl=' + encodeURIComponent(result.Content[i].imgurl) + '"><img class="mui-media-object" src="' + result.Content[i].imgurl + '"><div class="mui-media-body">' + result.Content[i].bookname + '</div> </a>';
+                        table.innerHTML = "";
+                        table.appendChild(li);
+                    }
+
+                } else {
+                    for (var i = cells.length, len = i + 10; i < len; i++) {
+                        var li = document.createElement('li');
+                        li.className = 'mui-table-view-cell mui-media mui-col-xs-6';
+                        li.innerHTML = ' <a  href="content.html?bid=' + result.Content[i].bid + '&bookname=' + encodeURIComponent(result.Content[i].bookname) + '&imgurl=' + encodeURIComponent(result.Content[i].imgurl) + '"><img class="mui-media-object" src="' + result.Content[i].imgurl + '"><div class="mui-media-body">' + result.Content[i].bookname + '</div> </a>';
+                        table.appendChild(li);
+                    }
+
+                    $("#span_isenter").html("0");
+                }
+
+            }
+        });
+
+    }
+    $('#txt_value').bind('keyup', function (event) {
+        if (event.keyCode == "13") {
+
+            $("#span_isenter").html("1");
+
+            if ($("#txt_value").val() == "" || $("#txt_value").val() == null) {
+                window.location.reload();
+                return;
+            }
+
+            loaddata();
+        }
+    });
+
+
+</script>
+
+</html>
